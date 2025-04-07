@@ -1,7 +1,16 @@
 import { parseUserTheme, type UserConfig } from "./utils";
 import css from "./assets";
 
-export async function loadModule(): Promise<never> {
+export async function loadModule(id: string, base: string, type: string) {
+	let result;
+	if (id.includes("@tailwindcss/typography")) {
+		result = await import("@tailwindcss/typography");
+	}
+
+	return {
+		base,
+		module: result?.default ?? result,
+	};
 	throw new Error(`The browser build does not support plugins or config files.`);
 }
 
@@ -9,9 +18,10 @@ export async function loadStylesheet(id: string, base: string, { theme }: UserCo
 	function load() {
 		if (id === "tailwindcss") {
 			const userTheme = parseUserTheme(theme);
+			const plugins = `@plugin "@tailwindcss/typography";`;
 			return {
 				base,
-				content: css.index + "\n" + userTheme,
+				content: css.index + "\n" + userTheme + "\n" + plugins,
 			};
 		} else if (id === "tailwindcss/preflight" || id === "tailwindcss/preflight.css" || id === "./preflight.css") {
 			return {
