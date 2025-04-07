@@ -24,9 +24,6 @@
 		"generator"
 	],
 	"type": "module",
-	"types": "./types/index.d.ts",
-	"main": "./dist/vite-use-tailwind.cjs",
-	"module": "./dist/vite-use-tailwind.js",
 	"scripts": {
 		"dev": "vite",
 		"build": "vue-tsc -b && vite build",
@@ -36,6 +33,9 @@
 		"demo:deploy": "npm run demo:build && gh-pages -d demo/dist",
 		"prepublishOnly": "npm run build"
 	},
+	"types": "./types/index.d.ts",
+	"main": "./dist/vite-use-tailwind.cjs",
+	"module": "./dist/vite-use-tailwind.js",
 	"exports": {
 		".": {
 			"types": "./types/index.d.ts",
@@ -48,6 +48,7 @@
 		"types",
 		"tsconfig.tsbuildinfo"
 	],
+	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^22.14.0",
 		"@vitejs/plugin-vue": "^5.2.3",
@@ -71,9 +72,5 @@
 			"optional": true
 		}
 	},
-	"packageManager": "pnpm@10.7.1+sha512.2d92c86b7928dc8284f53494fb4201f983da65f0fb4f0d40baafa5cf628fa31dae3e5968f12466f17df7e97310e30f343a648baea1b9b350685dafafffdf5808",
-	"dependencies": {
-		"@mdi/js": "^7.4.47",
-		"@tailwindcss/typography": "^0.5.16"
-	}
+	"packageManager": "pnpm@10.7.1+sha512.2d92c86b7928dc8284f53494fb4201f983da65f0fb4f0d40baafa5cf628fa31dae3e5968f12466f17df7e97310e30f343a648baea1b9b350685dafafffdf5808"
 }

@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 tsconfig.tsbuildinfo
-types
+types/*

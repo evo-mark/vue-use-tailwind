@@ -8,7 +8,10 @@ interface ShadowRootExpose {
 	shadow_root?: GShadowRoot;
 }
 
-export const useTailwind = (el: MaybeRefOrGetter<HTMLElement | ShadowRootExpose>, { theme } = {} as UserConfig) => {
+export const useTailwind = (
+	el: MaybeRefOrGetter<HTMLElement | ShadowRootExpose>,
+	{ theme, plugins } = {} as UserConfig,
+) => {
 	let compiler: Compiler;
 	const observer = ref();
 	const isInit = ref(false);
@@ -24,7 +27,7 @@ export const useTailwind = (el: MaybeRefOrGetter<HTMLElement | ShadowRootExpose>
 			rebuild("full", { buildQueue, compiler, sheet, root, classes }),
 		);
 
-		compiler = createCompiler(root, { lastCss, classes, styleObserver, theme }) as Compiler;
+		compiler = createCompiler(root, { lastCss, classes, styleObserver, theme, plugins }) as Compiler;
 		buildQueue.value = compiler;
 		rebuild("full", { buildQueue, compiler, sheet, root, classes });
 		root.value.appendChild(sheet.value);

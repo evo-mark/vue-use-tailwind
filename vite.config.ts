@@ -22,4 +22,7 @@ export default defineConfig({
 		},
 	},
 	plugins: [],
+	optimizeDeps: {
+		exclude: ["@tailwindcss/typography"], // Ensure it's loaded at runtime
+	},
 });

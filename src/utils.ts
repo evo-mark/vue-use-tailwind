@@ -1,5 +1,6 @@
 import { loadModule, loadStylesheet } from "./loaders";
 import { compile } from "tailwindcss";
+import type { PluginCreator } from "tailwindcss/plugin";
 
 type Compiler = ReturnType<typeof import("tailwindcss").compile>;
 interface ThemeConfigItem {
@@ -9,7 +10,8 @@ interface ThemeConfigItem {
 }
 
 export type UserConfig = {
-	theme: string | string[] | ThemeConfigItem | ThemeConfigItem[];
+	theme?: string | string[] | ThemeConfigItem | ThemeConfigItem[];
+	plugins?: PluginCreator[];
 };
 
 export interface InstanceProperties {
@@ -20,6 +22,7 @@ export interface InstanceProperties {
 	compiler: Compiler;
 	root: Ref<HTMLElement>;
 	theme: UserConfig["theme"];
+	plugins: UserConfig["plugins"];
 	lastCss: Ref<string>;
 }
 
@@ -48,6 +51,7 @@ export function parseThemeTag(item: string | ThemeConfigItem): string {
 }
 
 export function parseUserTheme(theme: UserConfig["theme"]): string {
+	if (!theme) return "";
 	const themeArray = Array.isArray(theme) ? theme : [theme];
 
 	return themeArray
@@ -60,6 +64,19 @@ export function parseUserTheme(theme: UserConfig["theme"]): string {
 			return acc;
 		}, [])
 		.join("\n\n");
+}
+
+export function parseUserPlugins(plugins: UserConfig["plugins"]): string {
+	if (!plugins || Array.isArray(plugins) === false) {
+		return "";
+	}
+	return plugins
+		.reduce((acc: string[], curr: PluginCreator, index: number) => {
+			if (!curr) return acc;
+			acc.push(`@plugin "#plugin_${index}"`);
+			return acc;
+		}, [])
+		.join("\n");
 }
 
 export function createElementObserver(
@@ -128,7 +145,8 @@ export async function createCompiler(
 		classes,
 		styleObserver,
 		theme,
-	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss">,
+		plugins,
+	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss" | "plugins">,
 ) {
 	// The stylesheets may have changed causing a full rebuild so we'll need to
 	// gather the latest list of stylesheets.
@@ -155,8 +173,8 @@ export async function createCompiler(
 
 	const compiler = await compile(css, {
 		base: "/",
-		loadStylesheet: async (id, base) => loadStylesheet(id, base, { theme }),
-		loadModule,
+		loadStylesheet: async (id, base) => loadStylesheet(id, base, { theme, plugins }),
+		loadModule: async (id: string, base: string, type: string) => loadModule(id, base, type, plugins),
 	});
 
 	classes.value.clear();

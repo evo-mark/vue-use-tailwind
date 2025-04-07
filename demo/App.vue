@@ -11,6 +11,7 @@
 							<ToolbarHistory :editor="editor" />
 							<ToolbarHeading :editor="editor" :heading-levels="headingLevels" />
 							<ToolbarAlign :editor="editor" />
+							<ToolbarFormatText v-if="editor" :editor="editor" />
 						</header>
 						<VInput class="input-wysiwyg" :focused="isFocused" :dirty="isDirty">
 							<VField
@@ -61,9 +62,16 @@
 
 <script setup>
 import { useStorage } from "@vueuse/core";
-import { ref, onMounted, useTemplateRef } from "vue";
-import { Editor, EditorContent } from "@tiptap/vue-3";
-import { TailwindTextAlign, TailwindHeading } from "./extensions";
+import { ref, useTemplateRef } from "vue";
+import { useEditor, EditorContent } from "@tiptap/vue-3";
+import {
+	TailwindTextAlign,
+	TailwindHeading,
+	TailwindBold,
+	TailwindItalic,
+	TailwindUnderline,
+	TailwindStrikethrough,
+} from "./extensions";
 import StarterKit from "@tiptap/starter-kit";
 import { ShadowRoot } from "vue-shadow-dom";
 import { useTailwind } from "vue-use-tailwind";
@@ -71,52 +79,58 @@ import striptags from "striptags";
 import ToolbarAlign from "./toolbar/Align.vue";
 import ToolbarHeading from "./toolbar/Heading.vue";
 import ToolbarHistory from "./toolbar/History.vue";
+import ToolbarFormatText from "./toolbar/FormatText.vue";
+
+import TailwindTypography from "@tailwindcss/typography";
 
 const modelValue = useStorage("vue-use-tailwind", "", sessionStorage);
 
 const shadowRef = useTemplateRef("shadow");
-const editor = ref(null);
+
 const isFocused = ref(false);
 const isDirty = ref(false);
 
 const headingLevels = [1, 2, 3, 4, 5, 6];
 
-onMounted(async () => {
-	editor.value = new Editor({
-		extensions: [
-			StarterKit.configure({
-				history: {
-					newGroupDelay: 2000,
-				},
-			}),
-			TailwindTextAlign.configure({
-				types: ["heading", "paragraph"],
-			}),
-			TailwindHeading.configure({
-				heading: {
-					levels: headingLevels,
-				},
-			}),
-		],
-		content: modelValue.value,
-		onBlur() {
-			isFocused.value = false;
-		},
-		onFocus() {
-			isFocused.value = true;
-		},
-		onUpdate({ editor: ctx }) {
-			isDirty.value = !!striptags(ctx.getHTML());
-			modelValue.value = ctx.getHTML();
-		},
-		onCreate({ editor: ctx }) {
-			isDirty.value = !!striptags(ctx.getHTML());
-		},
-	});
+const editor = useEditor({
+	extensions: [
+		StarterKit.configure({
+			history: {
+				newGroupDelay: 2000,
+			},
+		}),
+		TailwindTextAlign.configure({
+			types: ["heading", "paragraph"],
+		}),
+		TailwindHeading.configure({
+			heading: {
+				levels: headingLevels,
+			},
+		}),
+		TailwindBold,
+		TailwindItalic,
+		TailwindUnderline,
+		TailwindStrikethrough,
+	],
+	content: modelValue.value,
+	onBlur() {
+		isFocused.value = false;
+	},
+	onFocus() {
+		isFocused.value = true;
+	},
+	onUpdate({ editor: ctx }) {
+		isDirty.value = !!striptags(ctx.getHTML());
+		modelValue.value = ctx.getHTML();
+	},
+	onCreate({ editor: ctx }) {
+		isDirty.value = !!striptags(ctx.getHTML());
+	},
 });
 
 const { classes } = useTailwind(shadowRef, {
 	theme: [{ content: "--color-mint-500: oklch(0.72 0.11 178);" }],
+	plugins: [TailwindTypography],
 });
 </script>
 
