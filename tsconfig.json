@@ -1,0 +1,30 @@
+{
+	"include": ["src/**/*","global.d.ts"],
+	"exclude": ["node_modules"],
+	"compilerOptions": {
+		"rootDir": ".",
+		"noEmitOnError": true,
+
+		"lib": ["DOM", "DOM.Iterable", "ES2022"],
+		"target": "ES2020",
+		"types": ["node"],
+		"declaration": true,
+		"emitDeclarationOnly": true,
+
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"outDir": "types",
+
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"preserveConstEnums": true,
+		"removeComments": true,
+		"typeRoots": ["./node_modules/@types"],
+		"esModuleInterop": true,
+		"strict": true,
+		"skipLibCheck": true
+	}
+}
