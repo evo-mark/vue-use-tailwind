@@ -57,5 +57,6 @@ export const useTailwind = (
 		observer,
 		root,
 		classes,
+		sheet,
 	};
 };
