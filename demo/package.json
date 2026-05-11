@@ -14,26 +14,26 @@
 	"license": "MIT",
 	"dependencies": {
 		"@mdi/js": "^7.4.47",
-		"@tailwindcss/typography": "^0.5.16",
-		"@tiptap/core": "^2.11.7",
-		"@tiptap/extension-bold": "^2.11.7",
-		"@tiptap/extension-heading": "^2.11.7",
-		"@tiptap/extension-italic": "^2.11.7",
-		"@tiptap/extension-strike": "^2.11.7",
-		"@tiptap/extension-text-align": "^2.11.7",
-		"@tiptap/extension-underline": "^2.11.7",
-		"@tiptap/pm": "^2.11.7",
-		"@tiptap/starter-kit": "^2.11.7",
-		"@tiptap/vue-3": "^2.11.7",
-		"@vueuse/core": "^13.0.0",
-		"prosemirror-state": "^1.4.3",
+		"@tailwindcss/typography": "^0.5.19",
+		"@tiptap/core": "^2.27.2",
+		"@tiptap/extension-bold": "^2.27.2",
+		"@tiptap/extension-heading": "^2.27.2",
+		"@tiptap/extension-italic": "^2.27.2",
+		"@tiptap/extension-strike": "^2.27.2",
+		"@tiptap/extension-text-align": "^2.27.2",
+		"@tiptap/extension-underline": "^2.27.2",
+		"@tiptap/pm": "^2.27.2",
+		"@tiptap/starter-kit": "^2.27.2",
+		"@tiptap/vue-3": "^2.27.2",
+		"@vueuse/core": "^14.3.0",
+		"prosemirror-state": "^1.4.4",
 		"striptags": "^3.2.0",
-		"vue": "^3.5.13",
+		"vue": "^3.5.34",
 		"vue-use-tailwind": "link:.."
 	},
 	"devDependencies": {
-		"@vitejs/plugin-vue": "^5.2.3",
-		"vite-plugin-vuetify": "^2.1.1",
-		"vuetify": "^3.8.0"
+		"@vitejs/plugin-vue": "^6.0.6",
+		"vite-plugin-vuetify": "^2.1.3",
+		"vuetify": "^3.12.6"
 	}
 }

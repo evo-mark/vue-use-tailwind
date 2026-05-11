@@ -12,6 +12,12 @@
 							<ToolbarHeading :editor="editor" :heading-levels="headingLevels" />
 							<ToolbarAlign :editor="editor" />
 							<ToolbarFormatText v-if="editor" :editor="editor" />
+							<VBtn
+								v-tooltip="`Reload class generator`"
+								variant="text"
+								:icon="mdiRefresh"
+								@click="reload"
+							/>
 						</header>
 						<VInput class="input-wysiwyg" :focused="isFocused" :dirty="isDirty">
 							<VField
@@ -82,6 +88,7 @@ import ToolbarHistory from "./toolbar/History.vue";
 import ToolbarFormatText from "./toolbar/FormatText.vue";
 
 import TailwindTypography from "@tailwindcss/typography";
+import { mdiRefresh } from "@mdi/js";
 
 const modelValue = useStorage("vue-use-tailwind", "", sessionStorage);
 
@@ -128,7 +135,7 @@ const editor = useEditor({
 	},
 });
 
-const { classes } = useTailwind(shadowRef, {
+const { classes, reload } = useTailwind(shadowRef, {
 	theme: [{ content: "--color-mint-500: oklch(0.72 0.11 178);" }],
 	plugins: [TailwindTypography],
 });

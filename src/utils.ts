@@ -24,6 +24,7 @@ export interface InstanceProperties {
 	theme: UserConfig["theme"];
 	plugins: UserConfig["plugins"];
 	lastCss: Ref<string>;
+	force: boolean
 }
 
 import type { Ref } from "vue";
@@ -146,7 +147,8 @@ export async function createCompiler(
 		styleObserver,
 		theme,
 		plugins,
-	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss" | "plugins">,
+		force
+	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss" | "plugins" | "force">,
 ) {
 	// The stylesheets may have changed causing a full rebuild so we'll need to
 	// gather the latest list of stylesheets.
@@ -167,14 +169,37 @@ export async function createCompiler(
 	}
 
 	// The input CSS did not change so the compiler does not need to be recreated
-	if (lastCss.value === css) return;
+	if (lastCss.value === css && !force) return;
 
 	lastCss.value = css;
 
-	const compiler = await compile(css, {
+	const compiler = compile(css, {
 		base: "/",
-		loadStylesheet: async (id, base) => loadStylesheet(id, base, { theme, plugins }),
-		loadModule: async (id: string, base: string, type: string) => loadModule(id, base, type, plugins),
+		loadStylesheet: async (id, base) => {
+			const result = await loadStylesheet(id, base, {
+				theme,
+				plugins,
+			});
+
+			return {
+				path: id,
+				base: result.base,
+				content: result.content,
+			};
+		},
+		loadModule: async (
+			id: string,
+			base: string,
+			type: "plugin" | "config"
+		) => {
+			const result = await loadModule(id, base, type, plugins);
+
+			return {
+				path: id,
+				base: result.base,
+				module: result.module,
+			};
+		}
 	});
 
 	classes.value.clear();

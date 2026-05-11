@@ -21,13 +21,13 @@ export const useTailwind = (
 	const buildQueue = ref();
 	const root = ref();
 
-	const bootstrap = () => {
+	const bootstrap = (force: boolean = false) => {
 		if (!root.value) return (isInit.value = false);
 		const styleObserver = new MutationObserver(() =>
 			rebuild("full", { buildQueue, compiler, sheet, root, classes }),
 		);
 
-		compiler = createCompiler(root, { lastCss, classes, styleObserver, theme, plugins }) as Compiler;
+		compiler = createCompiler(root, { lastCss, classes, styleObserver, theme, plugins, force }) as Compiler;
 		buildQueue.value = compiler;
 		rebuild("full", { buildQueue, compiler, sheet, root, classes });
 		root.value.appendChild(sheet.value);
@@ -42,7 +42,7 @@ export const useTailwind = (
 		} else {
 			root.value = maybeShadow;
 		}
-		bootstrap();
+		bootstrap(true);
 	}
 
 	watch(
