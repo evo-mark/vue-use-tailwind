@@ -34,6 +34,17 @@ export const useTailwind = (
 		observer.value = createElementObserver(root, { styleObserver, sheet, compiler, buildQueue, classes });
 	};
 
+	const reload = () => {
+		const maybeShadow = toValue(el);
+		if (!maybeShadow) return;
+		if ("shadow_root" in maybeShadow) {
+			root.value = maybeShadow.shadow_root;
+		} else {
+			root.value = maybeShadow;
+		}
+		bootstrap();
+	}
+
 	watch(
 		() => toValue(el),
 		(maybeShadow) => {
@@ -58,5 +69,6 @@ export const useTailwind = (
 		root,
 		classes,
 		sheet,
+		reload
 	};
 };
