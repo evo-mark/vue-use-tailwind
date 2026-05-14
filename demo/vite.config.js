@@ -2,6 +2,7 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 import { resolve } from "node:path";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => {
 	const alias =
@@ -18,12 +19,13 @@ export default defineConfig(({ mode }) => {
 		base: "/vue-use-tailwind/",
 		assetsDir: "",
 		plugins: [
+			tailwindcss(),
 			vue({
 				template: {
 					transformAssetUrls,
 				},
 			}),
-			vuetify(),
+			 vuetify({ styles: { configFile: 'css/settings.scss' } }),,
 		],
 	};
 });

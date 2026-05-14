@@ -94,6 +94,7 @@ import TailwindTypography from "@tailwindcss/typography";
 const { classes } = useTailwind(shadowRef, {
 	theme: "--color-mint-500: oklch(0.72 0.11 178);",
 	plugins: [TailwindTypography],
+	safelist: ["bg-teal-500", "bg-red-500"]
 });
 ```
 

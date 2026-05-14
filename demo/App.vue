@@ -7,7 +7,7 @@
 			<VContainer>
 				<VCard title="Content Editor" class="mb-4">
 					<VCardText>
-						<header class="bg-grey-lighten-2 d-flex rounded-t px-1 pt-3 pb-2">
+						<header class="bg-grey-lighten-2 flex rounded-t px-1 pt-3 pb-2">
 							<ToolbarHistory :editor="editor" />
 							<ToolbarHeading :editor="editor" :heading-levels="headingLevels" />
 							<ToolbarAlign :editor="editor" />
@@ -19,7 +19,7 @@
 								@click="reload"
 							/>
 						</header>
-						<VInput class="input-wysiwyg" :focused="isFocused" :dirty="isDirty">
+						<VInput ref="input" class="input-wysiwyg" :focused="isFocused" :dirty="isDirty">
 							<VField
 								label="Example WYSIWYG"
 								:active="isDirty || isFocused"
@@ -29,20 +29,27 @@
 								<ShadowRoot ref="shadow" class="w-100">
 									<EditorContent
 										:editor="editor"
-										class="input-wysiwyg__content prose v-field__input w-full px-4 pt-8 pb-4 *:outline-none *:focus-visible:outline-none"
+										class="input-wysiwyg__content prose dark:prose-invert v-field__input w-full px-4 pt-8 pb-4 *:outline-none *:focus-visible:outline-none"
 									/>
 								</ShadowRoot>
+								<BubbleMenu v-if="editor" :editor="editor" class=" z-50" :append-to="inputRef?.$el">
+									<VBtnGroup>
+										<VBtn class="px-2 py-1 transition-colors duration-300" active-color="primary" :active="editor.isActive('bold')" @click="editor.chain().focus().toggleBold().run()">Bold</VBtn>
+										<VBtn class="px-2 py-1 transition-colors duration-300" active-color="primary" :active="editor.isActive('italic')" @click="editor.chain().focus().toggleItalic().run()">Italic</VBtn>
+									</VBtnGroup>
+								</BubbleMenu>
 							</VField>
 						</VInput>
 					</VCardText>
+					<div class="bg-teal-600"></div>
 				</VCard>
 
 				<VCard class="mb-4" title="Current Classes">
 					<VCardText>
-						<div class="d-inline-flex ga-8 flex-wrap">
+						<div class="inline-flex gap-4 flex-wrap">
 							<div v-for="className in classes">{{ className }}</div>
 						</div>
-						<div class="d-flex justify-center pt-8">
+						<div class="flex justify-center pt-8">
 							<VAlert type="info" prominent variant="tonal" density="compact" style="max-width: 65ch">
 								Note that the JIT compiler doesn't currently remove unused classes generated in this
 								session.
@@ -94,6 +101,7 @@ import { mdiRefresh } from "@mdi/js";
 const modelValue = useStorage("vue-use-tailwind", "", sessionStorage);
 
 const shadowRef = useTemplateRef("shadow");
+const inputRef = useTemplateRef("input")
 
 const isFocused = ref(false);
 const isDirty = ref(false);
@@ -139,7 +147,7 @@ const editor = useEditor({
 const { classes, reload } = useTailwind(shadowRef, {
 	theme: [{ content: "--color-mint-500: oklch(0.72 0.11 178);" }],
 	plugins: [TailwindTypography],
-	safelist: ["bg-teal-500"],
+	safelist: ["bg-teal-500", "bg-teal-600"],
 });
 </script>
 

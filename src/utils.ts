@@ -85,7 +85,7 @@ export function parseUserPlugins(plugins: UserConfig["plugins"]): string {
 export function parseSafelist(safelist: UserConfig["safelist"]) {
 	const safelisted = Array.isArray(safelist) ? safelist : [safelist];
 
-	if (!safelist?.length) return "";
+	if (!safelisted?.length) return "";
 
 	return "@source inline(\"" + safelisted.join(" ") + "\");";
 }
