@@ -29,7 +29,7 @@ export async function loadModule(
 	} else throw new Error(`useTailwind encountered an error loading ${id}.`);
 }
 
-export async function loadStylesheet(id: string, base: string, { theme, plugins }: UserConfig) {
+export async function loadStylesheet(id: string, base: string, { theme, plugins, safelist }: UserConfig) {
 	function load() {
 		if (id === "tailwindcss") {
 			const userTheme = parseUserTheme(theme);

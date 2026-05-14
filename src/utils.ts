@@ -12,6 +12,7 @@ interface ThemeConfigItem {
 export type UserConfig = {
 	theme?: string | string[] | ThemeConfigItem | ThemeConfigItem[];
 	plugins?: PluginCreator[];
+	safelist?: string | string[];
 };
 
 export interface InstanceProperties {
@@ -23,6 +24,7 @@ export interface InstanceProperties {
 	root: Ref<HTMLElement>;
 	theme: UserConfig["theme"];
 	plugins: UserConfig["plugins"];
+	safelist: UserConfig["safelist"];
 	lastCss: Ref<string>;
 	force: boolean
 }
@@ -147,8 +149,9 @@ export async function createCompiler(
 		styleObserver,
 		theme,
 		plugins,
+		safelist,
 		force
-	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss" | "plugins" | "force">,
+	}: Pick<InstanceProperties, "classes" | "styleObserver" | "theme" | "lastCss" | "plugins" | "safelist" | "force">,
 ) {
 	// The stylesheets may have changed causing a full rebuild so we'll need to
 	// gather the latest list of stylesheets.
@@ -179,6 +182,7 @@ export async function createCompiler(
 			const result = await loadStylesheet(id, base, {
 				theme,
 				plugins,
+				safelist
 			});
 
 			return {
