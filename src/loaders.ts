@@ -1,4 +1,4 @@
-import { parseUserTheme, parseUserPlugins, type UserConfig } from "./utils";
+import { parseSafelist, parseUserTheme, parseUserPlugins, type UserConfig } from "./utils";
 import type { PluginCreator } from "tailwindcss/plugin";
 
 import css from "./assets";
@@ -34,10 +34,11 @@ export async function loadStylesheet(id: string, base: string, { theme, plugins,
 		if (id === "tailwindcss") {
 			const userTheme = parseUserTheme(theme);
 			const pluginImports = parseUserPlugins(plugins);
+			const safelistedClasses = parseSafelist(safelist);
 
 			return {
 				base,
-				content: css.index + "\n" + userTheme + "\n" + pluginImports,
+				content: css.index + "\n" + userTheme + "\n" + pluginImports + "\n" + safelistedClasses,
 			};
 		} else if (id === "tailwindcss/preflight" || id === "tailwindcss/preflight.css" || id === "./preflight.css") {
 			return {

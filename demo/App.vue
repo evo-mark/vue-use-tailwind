@@ -86,6 +86,7 @@ import ToolbarAlign from "./toolbar/Align.vue";
 import ToolbarHeading from "./toolbar/Heading.vue";
 import ToolbarHistory from "./toolbar/History.vue";
 import ToolbarFormatText from "./toolbar/FormatText.vue";
+import { BubbleMenu } from "@tiptap/vue-3/menus";
 
 import TailwindTypography from "@tailwindcss/typography";
 import { mdiRefresh } from "@mdi/js";
@@ -138,6 +139,7 @@ const editor = useEditor({
 const { classes, reload } = useTailwind(shadowRef, {
 	theme: [{ content: "--color-mint-500: oklch(0.72 0.11 178);" }],
 	plugins: [TailwindTypography],
+	safelist: ["bg-teal-500"],
 });
 </script>
 

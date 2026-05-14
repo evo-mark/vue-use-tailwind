@@ -82,6 +82,14 @@ export function parseUserPlugins(plugins: UserConfig["plugins"]): string {
 		.join("\n");
 }
 
+export function parseSafelist(safelist: UserConfig["safelist"]) {
+	const safelisted = Array.isArray(safelist) ? safelist : [safelist];
+
+	if (!safelist?.length) return "";
+
+	return "@source inline(\"" + safelisted.join(" ") + "\");";
+}
+
 export function createElementObserver(
 	root: Ref<HTMLElement>,
 	{
